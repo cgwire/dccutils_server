@@ -2,7 +2,6 @@ import traceback
 import os
 import datetime
 import tempfile
-import shutil
 import uuid
 import logging
 import queue
@@ -127,13 +126,11 @@ def take_viewport_screenshot(extension: str = "", output_path: str = ""):
     output_path = generate_output_path(output_path, extension, False)
     run_in_queue_or_not(app.dcc_context.push_state)
     try:
-        file_path = run_in_queue_or_not(
+        run_in_queue_or_not(
             app.dcc_context.take_viewport_screenshot,
             kwargs={"output_path": output_path, "extension": extension},
-            callback_to_wait=lambda a: os.path.exists(a),
+            callback_to_wait=lambda _: not app.dcc_context.take_screenshot_in_progress,
         )
-        if os.path.realpath(file_path) != os.path.realpath(output_path):
-            shutil.move(file_path, output_path)
     finally:
         run_in_queue_or_not(app.dcc_context.pop_state)
     return {"file": output_path}
@@ -149,7 +146,7 @@ def take_render_screenshot(
     output_path = generate_output_path(output_path, extension, False)
     run_in_queue_or_not(app.dcc_context.push_state)
     try:
-        file_path = run_in_queue_or_not(
+        run_in_queue_or_not(
             app.dcc_context.take_render_screenshot,
             kwargs={
                 "renderer": renderer,
@@ -157,10 +154,8 @@ def take_render_screenshot(
                 "extension": extension,
                 "use_colorspace": use_colorspace,
             },
-            callback_to_wait=lambda a: os.path.exists(a),
+            callback_to_wait=lambda _: not app.dcc_context.take_screenshot_in_progress,
         )
-        if os.path.realpath(file_path) != os.path.realpath(output_path):
-            shutil.move(file_path, output_path)
     finally:
         run_in_queue_or_not(app.dcc_context.pop_state)
     return {"file": output_path}
@@ -171,13 +166,11 @@ def take_viewport_animation(output_path: str = "", extension: str = ""):
     output_path = generate_output_path(output_path, extension, True)
     run_in_queue_or_not(app.dcc_context.push_state)
     try:
-        file_path = run_in_queue_or_not(
+        run_in_queue_or_not(
             app.dcc_context.take_viewport_animation,
             kwargs={"output_path": output_path, "extension": extension},
             callback_to_wait=lambda _: not app.dcc_context.take_movie_in_progress,
         )
-        if os.path.realpath(file_path) != os.path.realpath(output_path):
-            shutil.move(file_path, output_path)
     finally:
         run_in_queue_or_not(app.dcc_context.pop_state)
     return {"file": output_path}
@@ -193,7 +186,7 @@ def take_render_animation(
     output_path = generate_output_path(output_path, extension, True)
     run_in_queue_or_not(app.dcc_context.push_state)
     try:
-        file_path = run_in_queue_or_not(
+        run_in_queue_or_not(
             app.dcc_context.take_render_animation,
             kwargs={
                 "renderer": renderer,
@@ -203,8 +196,6 @@ def take_render_animation(
             },
             callback_to_wait=lambda _: not app.dcc_context.take_movie_in_progress,
         )
-        if os.path.realpath(file_path) != os.path.realpath(output_path):
-            shutil.move(file_path, output_path)
     finally:
         run_in_queue_or_not(app.dcc_context.pop_state)
     return {"file": output_path}
