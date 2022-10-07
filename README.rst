@@ -56,5 +56,5 @@ Visit `cg-wire.com <https://cg-wire.com>`__ for more information.
    :target: https://discord.com/invite/VbCxtKN
 .. |CGWire Logo| image:: https://zou.cg-wire.com/cgwire.png
    :target: https://cg-wire.com
-.. |Downloads| image:: https://static.pepy.tech/personalized-badge/dccutils?period=month&units=international_system&left_color=grey&right_color=orange&left_text=Downloads
-   :target: https://pepy.tech/project/dccutils
+.. |Downloads| image:: https://static.pepy.tech/personalized-badge/dccutils-server?period=month&units=international_system&left_color=grey&right_color=orange&left_text=Downloads
+ :target: https://pepy.tech/project/dccutils-server
